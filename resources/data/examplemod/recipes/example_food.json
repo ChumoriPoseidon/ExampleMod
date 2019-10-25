@@ -1,0 +1,19 @@
+{
+	"type": "example_crafting_shaped",
+	"pattern": [
+		"#",
+		"M",
+		"#"
+	],
+	"key": {
+		"#": {
+			"item": "examplemod:item_example"
+		},
+		"M": {
+			"item": "minecraft:cooked_beef"
+		}
+	},
+	"result": {
+		"item": "examplemod:item_example_food"
+	}
+}

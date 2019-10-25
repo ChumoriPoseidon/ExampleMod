@@ -1,0 +1,8 @@
+{
+	"type": "example_processing",
+	"ingredient": {
+		"item": "minecraft:shears"
+	},
+	"result": "examplemod:item_example_tool",
+	"cookingtime": 200
+}

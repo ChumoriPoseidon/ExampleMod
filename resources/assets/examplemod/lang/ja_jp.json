@@ -1,0 +1,14 @@
+{
+	"item.examplemod.item_example": "アイテム例",
+	"item.examplemod.item_example_food": "フード例",
+	"item.examplemod.item_example_tool": "ツール例",
+	"block.examplemod.block_example": "ブロック例",
+	"block.examplemod.block_example_thorns": "特殊ブロック例 1",
+	"block.examplemod.block_example_cake": "特殊ブロック例 2",
+	"block.examplemod.block_example_crafting_table": "特殊ブロック例 3",
+	"block.examplemod.block_example_processor": "特殊ブロック例 4",
+	"block.examplemod.block_example_chest": "特殊ブロック例 5",
+	"container.example_block_crafting_table": "作業台例",
+	"container.example_block_chest": "チェスト例",
+	"container.example_block_processor": "加工機例"
+}

@@ -1,0 +1,16 @@
+{
+	"type": "example_crafting_shaped",
+	"pattern": [
+		"###",
+		"###",
+		"###"
+	],
+	"key": {
+		"#": {
+			"item": "examplemod:item_example"
+		}
+	},
+	"result": {
+		"item": "examplemod:block_example"
+	}
+}

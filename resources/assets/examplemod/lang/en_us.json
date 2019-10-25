@@ -1,0 +1,14 @@
+{
+	"item.examplemod.item_example": "Example Item",
+	"item.examplemod.item_example_food": "Example Food",
+	"item.examplemod.item_example_tool": "Example Tool",
+	"block.examplemod.block_example": "Example Block",
+	"block.examplemod.block_example_thorns": "Example Special Block 1",
+	"block.examplemod.block_example_cake": "Example Special Block 2",
+	"block.examplemod.block_example_crafting_table": "Example Special Block 3",
+	"block.examplemod.block_example_processor": "Example Special Block 4",
+	"block.examplemod.block_example_chest": "Example Special Block 5",
+	"container.example_block_crafting_table": "Example Crafting Table",
+	"container.example_block_chest": "Example Chest",
+	"container.example_block_processor": "Example Processor"
+}

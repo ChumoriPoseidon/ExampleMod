@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable_with_bottom",
+	"textures": {
+		"top": "examplemod:block/block_example_processor_top",
+		"bottom": "examplemod:block/block_example_processor_bottom",
+		"front": "examplemod:block/block_example_processor_front",
+		"side": "examplemod:block/block_example_processor_side"
+	}
+}

@@ -1,0 +1,41 @@
+{
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+        "particle": "examplemod:block/block_example",
+        "side": "examplemod:block/block_example",
+        "thorns": "examplemod:block/block_example_thorns"
+    },
+    "elements": [
+    	{
+    		"from": [ 0, 0, 0 ],
+    		"to": [ 16, 16, 16 ],
+    		"faces": {
+    			"down": {"uv": [ 0, 0, 16, 16 ], "texture": "#side"},
+    			"up": {"uv": [ 0, 0, 16, 16 ], "texture": "#side"},
+    			"north": {"uv": [ 0, 0, 16, 16 ], "texture": "#side"},
+    			"south": {"uv": [ 0, 0, 16, 16 ], "texture": "#side"},
+    			"west": {"uv": [ 0, 0, 16, 16 ], "texture": "#side"},
+    			"east": {"uv": [ 0, 0, 16, 16 ], "texture": "#side"}
+    		}
+    	},
+    	{
+    		"from": [ -1, 0, 8 ],
+    		"to": [ 17, 16, 8 ],
+    		"rotation": {"origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true},
+    		"faces": {
+    			"north": {"uv": [ 0, 0, 16, 16 ], "texture": "#thorns"},
+    			"south": {"uv": [ 0, 0, 16, 16 ], "texture": "#thorns"}
+    		}
+    	},
+    	{
+    		"from": [ 8, 0, -1 ],
+    		"to": [ 8, 16, 17 ],
+    		"rotation": {"origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true},
+    		"faces": {
+    			"west": {"uv": [ 0, 0, 16, 16 ], "texture": "#thorns"},
+    			"east": {"uv": [ 0, 0, 16, 16 ], "texture": "#thorns"}
+    		}
+    	}
+    ]
+}

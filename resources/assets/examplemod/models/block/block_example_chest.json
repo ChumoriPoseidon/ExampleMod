@@ -1,0 +1,25 @@
+{
+	"parent": "block/block",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "examplemod:block/block_example_chest_front",
+		"down": "examplemod:block/block_example_chest_bottom",
+		"up": "examplemod:block/block_example_chest_top",
+		"front": "examplemod:block/block_example_chest_front",
+		"side": "examplemod:block/block_example_chest_side"
+	},
+    "elements": [
+    	{
+    		"from": [ 1, 0, 1 ],
+    		"to": [ 15, 14, 15 ],
+    		"faces": {
+    			"down": {"texture": "#down"},
+    			"up": {"texture": "#up"},
+    			"north": {"texture": "#front"},
+    			"south": {"texture": "#side"},
+    			"west": {"texture": "#side"},
+    			"east": {"texture": "#side"}
+    		}
+    	}
+    ]
+}
