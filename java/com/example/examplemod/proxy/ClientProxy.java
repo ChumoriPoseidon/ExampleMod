@@ -3,6 +3,7 @@ package com.example.examplemod.proxy;
 import com.example.examplemod.ExampleMod.RegistryEvents;
 import com.example.examplemod.container.ExampleChestScreen;
 import com.example.examplemod.container.ExampleCraftingTableScreen;
+import com.example.examplemod.container.ExampleDecomposerScreen;
 import com.example.examplemod.container.ExampleProcessorScreen;
 
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,7 @@ public class ClientProxy implements IProxy {
 		ScreenManager.registerFactory(RegistryEvents.EXAMPLE_CRAFTING_TABLE_CONTAINER, ExampleCraftingTableScreen::new);
 
 		ScreenManager.registerFactory(RegistryEvents.EXAMPLE_PROCESSOR_CONTAINER, ExampleProcessorScreen::new);
+		ScreenManager.registerFactory(RegistryEvents.EXAMPLE_DECOMPOSER_CONTAINER, ExampleDecomposerScreen::new);
 		ScreenManager.registerFactory(RegistryEvents.EXAMPLE_CHEST_CONTAINER, ExampleChestScreen::new);
 	}
 

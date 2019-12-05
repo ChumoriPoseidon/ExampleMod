@@ -26,6 +26,7 @@ public class CustomRecipeSerializer<T extends ExampleProcessorRecipe> extends Fo
 		this.cookTime = cookTimeIn;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public T read(ResourceLocation recipeId, JsonObject json) {
 		String group = JSONUtils.getString(json, "group", "");
@@ -45,8 +46,8 @@ public class CustomRecipeSerializer<T extends ExampleProcessorRecipe> extends Fo
 				return new IllegalStateException("Item: " + resultName + " does not exist");
 			}));
 		}
-//		float experience = JSONUtils.getFloat(json, "experience", 0.0F);
-		int cookTime = JSONUtils.getInt(json, "cookingtime", 200);
+		float experience = JSONUtils.getFloat(json, "experience", 0.0F);
+		int cookTime = JSONUtils.getInt(json, "cookingtime", this.cookTime);
 		{
 			System.out.println("Check Recipe");
 			String info = "\n";
@@ -56,7 +57,7 @@ public class CustomRecipeSerializer<T extends ExampleProcessorRecipe> extends Fo
 			info += "Cook Time: " + cookTime;
 			System.out.println(info);
 		}
-		return this.factory.create(recipeId, group, ingredient, result, cookTime);
+		return this.factory.create(recipeId, group, ingredient, result, experience, cookTime);
 	}
 
 	@Override
@@ -64,9 +65,9 @@ public class CustomRecipeSerializer<T extends ExampleProcessorRecipe> extends Fo
 		String group = buffer.readString(32767);
 		Ingredient ingredient = Ingredient.read(buffer);
 		ItemStack result = buffer.readItemStack();
-//		float experience = buffer.readFloat();
+		float experience = buffer.readFloat();
 		int cookTime = buffer.readVarInt();
-		return this.factory.create(recipeId, group, ingredient, result, cookTime);
+		return this.factory.create(recipeId, group, ingredient, result, experience, cookTime);
 	}
 
 	@Override
@@ -74,11 +75,11 @@ public class CustomRecipeSerializer<T extends ExampleProcessorRecipe> extends Fo
 		buffer.writeString(recipe.group);
 		recipe.ingredient.write(buffer);
 		buffer.writeItemStack(recipe.result);
-//		buffer.writeFloat(recipe.experience);
+		buffer.writeFloat(recipe.experience);
 		buffer.writeVarInt(recipe.cookTime);
 	}
 
 	public interface IFactory<T extends ExampleProcessorRecipe> {
-		T create(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, int cookTimeIn);
+		T create(ResourceLocation id, String group, Ingredient ingredient, ItemStack result, float experience, int cookTime);
 	}
 }

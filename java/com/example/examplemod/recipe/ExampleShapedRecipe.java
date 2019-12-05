@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.example.examplemod.ExampleMod;
 import com.example.examplemod.ExampleMod.RegistryEvents;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -144,7 +143,7 @@ public class ExampleShapedRecipe implements IRecipe<CraftingInventory>, net.mine
 
 	public static class Serializer extends ForgeRegistryEntry<IRecipeSerializer<?>> implements IRecipeSerializer<ExampleShapedRecipe> {
 
-		private static final ResourceLocation NAME = new ResourceLocation(ExampleMod.MODID, "example_crafting_shaped");
+//		private static final ResourceLocation NAME = new ResourceLocation(ExampleMod.MODID, "example_crafting_shaped");
 
 		@Override
 		public ExampleShapedRecipe read(ResourceLocation recipeId, JsonObject json) {
@@ -162,7 +161,7 @@ public class ExampleShapedRecipe implements IRecipe<CraftingInventory>, net.mine
 			NonNullList<Ingredient> ingredients = ExampleShapedRecipe.deserializeIngredients(pattern, map, i, j);
 			ItemStack result = ExampleShapedRecipe.deserializeItem(JSONUtils.getJsonObject(json, "result"));
 //			System.out.println("Complete construst recipe from json.");
-			ExampleShapedRecipe recipe = new ExampleShapedRecipe(recipeId, group, i, j, ingredients, result);
+//			ExampleShapedRecipe recipe = new ExampleShapedRecipe(recipeId, group, i, j, ingredients, result);
 //			{
 //				System.out.println("Check Recipe");
 //				String info = "\n";

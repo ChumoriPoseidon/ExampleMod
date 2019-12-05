@@ -10,20 +10,24 @@ import org.apache.logging.log4j.Logger;
 import com.example.examplemod.block.ExampleCake;
 import com.example.examplemod.block.ExampleChest;
 import com.example.examplemod.block.ExampleCraftingTable;
+import com.example.examplemod.block.ExampleDecomposer;
 import com.example.examplemod.block.ExampleProcessor;
 import com.example.examplemod.block.ExampleThornsBlock;
 import com.example.examplemod.container.ExampleChestContainer;
 import com.example.examplemod.container.ExampleCraftingTableContainer;
 import com.example.examplemod.container.ExampleCraftingTableContainerType;
+import com.example.examplemod.container.ExampleDecomposerContainer;
 import com.example.examplemod.container.ExampleProcessorContainer;
 import com.example.examplemod.item.ExampleTool;
 import com.example.examplemod.proxy.ClientProxy;
 import com.example.examplemod.proxy.IProxy;
 import com.example.examplemod.proxy.ServerProxy;
 import com.example.examplemod.recipe.CustomRecipeSerializer;
+import com.example.examplemod.recipe.ExampleDecomposerRecipe;
 import com.example.examplemod.recipe.ExampleProcessorRecipe;
 import com.example.examplemod.recipe.ExampleShapedRecipe;
 import com.example.examplemod.tileentity.ExampleChestTileEntity;
+import com.example.examplemod.tileentity.ExampleDecomposerTileEntity;
 import com.example.examplemod.tileentity.ExampleProcessorTileEntity;
 
 import net.minecraft.block.Block;
@@ -146,15 +150,18 @@ public class ExampleMod {
 		public static Block EXAMPLE_CAKE; // like "cake"[meta, using block]
 		public static Block EXAMPLE_CRAFTING_TABLE; // like "crafting_table"[gui, container]
 		public static Block EXAMPLE_PROCESSOR; // like "furnace"[tileentity]
+		public static Block EXAMPLE_DECOMPOSER; // like "furnace"[tileentity] + by-product
 		public static Block EXAMPLE_CHEST; // like "chest"[tileentity]
 
 		// ContainerType
 		public static ContainerType<ExampleCraftingTableContainer> EXAMPLE_CRAFTING_TABLE_CONTAINER;
 		public static ContainerType<ExampleProcessorContainer> EXAMPLE_PROCESSOR_CONTAINER;
+		public static ContainerType<ExampleDecomposerContainer> EXAMPLE_DECOMPOSER_CONTAINER;
 		public static ContainerType<ExampleChestContainer> EXAMPLE_CHEST_CONTAINER;
 
 		// TileEntityType
 		public static TileEntityType<ExampleProcessorTileEntity> EXAMPLE_PROCESSOR_TILEENTITY;
+		public static TileEntityType<ExampleDecomposerTileEntity> EXAMPLE_DECOMPOSER_TILEENTITY;
 		public static TileEntityType<ExampleChestTileEntity> EXAMPLE_CHEST_TILEENTITY;
 
 		// RecipeType & RecipeSerializer
@@ -162,6 +169,8 @@ public class ExampleMod {
 		public static IRecipeSerializer<ExampleShapedRecipe> EXAMPLE_CRAFTING_SHAPED_RECIPE;
 		public static IRecipeType<ExampleProcessorRecipe> EXAMPLE_PROCESSOR_RECIPE_TYPE;
 		public static IRecipeSerializer<ExampleProcessorRecipe> EXAMPLE_PROCESSOR_RECIPE;
+		public static IRecipeType<ExampleDecomposerRecipe> EXAMPLE_DECOMPOSER_RECIPE_TYPE;
+		public static IRecipeSerializer<ExampleDecomposerRecipe> EXAMPLE_DECOMPOSER_RECIPE;
 
 
 		@SubscribeEvent
@@ -203,8 +212,9 @@ public class ExampleMod {
 
 			EXAMPLE_CRAFTING_TABLE = new ExampleCraftingTable();
 
-//			EXAMPLE_GREENING_PROCESSOR = new ExampleGreeningProcessor();
 			EXAMPLE_PROCESSOR = new ExampleProcessor();
+
+			EXAMPLE_DECOMPOSER = new ExampleDecomposer();
 
 			EXAMPLE_CHEST = new ExampleChest();
 		}
@@ -214,21 +224,20 @@ public class ExampleMod {
 			// register a new container type here
 			LOGGER.info("HELLO from Register ContainerType");
 
+			EXAMPLE_CRAFTING_TABLE_CONTAINER = new ExampleCraftingTableContainerType();
 //			EXAMPLE_CRAFTING_TABLE_CONTAINER = (ContainerType<ExampleCraftingTableContainer>) IForgeContainerType.create((windowId, inventory, extraData) -> {
 //				return new ExampleCraftingTableContainer(windowId, inventory);
 //			}).setRegistryName("containertype_example_crafting_table");
-
-			EXAMPLE_CRAFTING_TABLE_CONTAINER = new ExampleCraftingTableContainerType();
-
-//			EXAMPLE_GREENING_PROCESSOR_CONTAINER = new ExampleGreeningProcessorContainerType();
-//			EXAMPLE_GREENING_PROCESSOR_CONTAINER = (ContainerType<ExampleGreeningProcessorContainer>) IForgeContainerType.create((windowId, inventory, extraData) -> {
-//				return new ExampleGreeningProcessorContainer(windowId, proxy.getWorld(), extraData.readBlockPos(), inventory, proxy.getPlayer());
-//			}).setRegistryName("containertype_example_greening_processor");
 
 //			EXAMPLE_PROCESSOR_CONTAINER = new ExampleProcessorContainerType();
 			EXAMPLE_PROCESSOR_CONTAINER = (ContainerType<ExampleProcessorContainer>) IForgeContainerType.create((windowId, inventory, extraData) -> {
 				return new ExampleProcessorContainer(windowId, inventory);
 			}).setRegistryName("containertype_example_processor");
+
+//			EXAMPLE_DECOMPOSER_CONTAINER = new ExampleDecomposerContainerType();
+			EXAMPLE_DECOMPOSER_CONTAINER = (ContainerType<ExampleDecomposerContainer>) IForgeContainerType.create((windowId, inventory, extraData) -> {
+				return new ExampleDecomposerContainer(windowId, inventory);
+			}).setRegistryName("containertype_example_decomposer");
 
 //			EXAMPLE_CHEST_CONTAINER = new ExampleChestContainerType();
 			EXAMPLE_CHEST_CONTAINER = (ContainerType<ExampleChestContainer>) IForgeContainerType.create((windowId, inventory, extraData) -> {
@@ -238,6 +247,7 @@ public class ExampleMod {
 			event.getRegistry().registerAll(
 					EXAMPLE_CRAFTING_TABLE_CONTAINER,
 					EXAMPLE_PROCESSOR_CONTAINER,
+					EXAMPLE_DECOMPOSER_CONTAINER,
 					EXAMPLE_CHEST_CONTAINER
 					);
 		}
@@ -247,12 +257,13 @@ public class ExampleMod {
 			// register a new tileentity type here
 			LOGGER.info("HELLO from Register TileEntityType");
 
-//			EXAMPLE_GREENING_PROCESSOR_TILEENTITY = (TileEntityType<ExampleGreeningProcessorTileEntity>) TileEntityType.Builder.create(ExampleGreeningProcessorTileEntity::new, EXAMPLE_GREENING_PROCESSOR).build(null).setRegistryName("tileentitytype_example_greening_processor");
 			EXAMPLE_PROCESSOR_TILEENTITY = (TileEntityType<ExampleProcessorTileEntity>) TileEntityType.Builder.create(ExampleProcessorTileEntity::new, EXAMPLE_PROCESSOR).build(null).setRegistryName("tileentitytype_example_processor");
+			EXAMPLE_DECOMPOSER_TILEENTITY = (TileEntityType<ExampleDecomposerTileEntity>) TileEntityType.Builder.create(ExampleDecomposerTileEntity::new, EXAMPLE_DECOMPOSER).build(null).setRegistryName("tileentitytype_example_decomposer");
 			EXAMPLE_CHEST_TILEENTITY = (TileEntityType<ExampleChestTileEntity>) TileEntityType.Builder.create(ExampleChestTileEntity::new, EXAMPLE_CHEST).build(null).setRegistryName("tileentitytype_example_chest");
 
 			event.getRegistry().registerAll(
 					EXAMPLE_PROCESSOR_TILEENTITY,
+					EXAMPLE_DECOMPOSER_TILEENTITY,
 					EXAMPLE_CHEST_TILEENTITY
 					);
 		}
@@ -264,14 +275,16 @@ public class ExampleMod {
 
 			EXAMPLE_CRAFTING_SHAPED_RECIPE_TYPE = IRecipeType.register("example_crafting");
 			EXAMPLE_PROCESSOR_RECIPE_TYPE = IRecipeType.register("example_processor");
+			EXAMPLE_DECOMPOSER_RECIPE_TYPE = IRecipeType.register("example_decomposer");
 
 			EXAMPLE_CRAFTING_SHAPED_RECIPE = (IRecipeSerializer<ExampleShapedRecipe>) IRecipeSerializer.register("example_crafting_shaped", new ExampleShapedRecipe.Serializer());
-//			EXAMPLE_PROCESSOR_RECIPE = (CustomCookingRecipeSerializer<ExampleProcessorRecipe>) IRecipeSerializer.register("example_processor", new CustomCookingRecipeSerializer<>(ExampleProcessorRecipe::new, 200));
 			EXAMPLE_PROCESSOR_RECIPE = (IRecipeSerializer<ExampleProcessorRecipe>) IRecipeSerializer.register("example_processing", new CustomRecipeSerializer<>(ExampleProcessorRecipe::new, 200));
+			EXAMPLE_DECOMPOSER_RECIPE = (IRecipeSerializer<ExampleDecomposerRecipe>) IRecipeSerializer.register("example_decomposing", new ExampleDecomposerRecipe.Serializer<>(ExampleDecomposerRecipe::new, 200));
 
 			event.getRegistry().registerAll(
 					EXAMPLE_CRAFTING_SHAPED_RECIPE,
-					EXAMPLE_PROCESSOR_RECIPE
+					EXAMPLE_PROCESSOR_RECIPE,
+					EXAMPLE_DECOMPOSER_RECIPE
 					);
 		}
 	}

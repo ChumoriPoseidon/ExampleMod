@@ -4,5 +4,6 @@
 		"item": "minecraft:shears"
 	},
 	"result": "examplemod:item_example_tool",
+	"experience": 100.0,
 	"cookingtime": 200
 }

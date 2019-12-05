@@ -2,8 +2,8 @@
 Forge入りMinecraft1.14.4のmoddingサンプルコード。(兼 備忘録)
 
 ## 対象バージョン
--Minecraft 1.14.4  
--Minecraft Forge 1.14.4-28.1.0 (10/25現在での最新安定版)
+- Minecraft 1.14.4  
+- Minecraft Forge 1.14.4-28.1.0 (10/25現在での最新安定版)
 
 ## 対象項目
 * Item(アイテム)登録
@@ -33,5 +33,6 @@ Forge入りMinecraft1.14.4のmoddingサンプルコード。(兼 備忘録)
     - ダメージブロック  
     - 食べ物(ケーキ)  
     - 作業台(Container, Screen, Recipe付き)
-    - 加工機(TileEntity, Container, Screen, Recipe付き)  
+    - 加工機(TileEntity, Container, Screen, Recipe付き)
+    - 副産物付き加工機(TileEntity, Container, Screen, Recipe付き)
     - チェスト(TileEntity, Container, Screen付き)

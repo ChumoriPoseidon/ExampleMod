@@ -19,16 +19,16 @@ public class ExampleProcessorRecipe implements IRecipe<IInventory> {
 	protected final String group;
 	protected final Ingredient ingredient;
 	protected final ItemStack result;
-//	protected final float experience;
+	protected final float experience;
 	protected final int cookTime;
 
-	public ExampleProcessorRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, int cookTimeIn) {
+	public ExampleProcessorRecipe(ResourceLocation idIn, String groupIn, Ingredient ingredientIn, ItemStack resultIn, float experienceIn, int cookTimeIn) {
 //		super(RegistryEvents.EXAMPLE_PROCESSOR_RECIPE_TYPE, RegistryEvents.EXAMPLE_PROCESSOR_RECIPE, idIn, groupIn, ingredientIn, resultIn);
 		this.id = idIn;
 		this.group = groupIn;
 		this.ingredient = ingredientIn;
 		this.result = resultIn;
-//		this.experience = experienceIn;
+		this.experience = experienceIn;
 		this.cookTime = cookTimeIn;
 	}
 
@@ -69,9 +69,9 @@ public class ExampleProcessorRecipe implements IRecipe<IInventory> {
 		return this.result;
 	}
 
-//	public float getExperience() {
-//	return this.experience();
-//}
+	public float getExperience() {
+	return this.experience;
+}
 
 	public int getCookTime() {
 		return this.cookTime;

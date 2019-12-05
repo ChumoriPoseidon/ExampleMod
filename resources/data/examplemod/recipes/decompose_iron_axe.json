@@ -1,0 +1,16 @@
+{
+	"type": "example_decomposing",
+	"ingredient": {
+		"item": "minecraft:iron_axe"
+	},
+	"result": {
+		"item": "minecraft:iron_nugget",
+		"count": 24
+	},
+	"byproduct": {
+		"item": "minecraft:stick",
+		"count": 2
+	},
+	"experience": 100.0,
+	"cookingtime": 200
+}

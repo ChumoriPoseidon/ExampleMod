@@ -7,10 +7,11 @@ import javax.annotation.Nullable;
 
 import com.example.examplemod.ExampleMod.RegistryEvents;
 import com.example.examplemod.block.ExampleProcessor;
-import com.example.examplemod.container.ExampleProcessorContainer;
-import com.example.examplemod.recipe.ExampleProcessorRecipe;
+import com.example.examplemod.container.ExampleDecomposerContainer;
+import com.example.examplemod.recipe.ExampleDecomposerRecipe;
 import com.google.common.collect.Maps;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.item.ExperienceOrbEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
@@ -20,9 +21,9 @@ import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.INamedContainerProvider;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.Tag;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
@@ -35,13 +36,14 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TranslationTextComponent;
 
-public class ExampleProcessorTileEntity extends TileEntity implements ISidedInventory, ITickableTileEntity, INamedContainerProvider {
+public class ExampleDecomposerTileEntity extends TileEntity implements ISidedInventory, ITickableTileEntity, INamedContainerProvider {
 
+	// 0: input, 1: fuel, 2: result, 3:by-product
 	private static final int[] SLOTS_UP = new int[]{0};
-	private static final int[] SLOTS_DOWN = new int[]{2, 1};
+	private static final int[] SLOTS_DOWN = new int[]{3, 2, 1};
 	private static final int[] SLOTS_HORIZONTAL = new int[]{1};
 
-	protected NonNullList<ItemStack> items = NonNullList.withSize(3, ItemStack.EMPTY);
+	protected NonNullList<ItemStack> items = NonNullList.withSize(4, ItemStack.EMPTY);
 
 	private int burnTime;
 	private int burnTimeTotal;
@@ -56,13 +58,13 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		public int get(int index) {
 			switch(index) {
 			case 0:
-				return ExampleProcessorTileEntity.this.burnTime;
+				return ExampleDecomposerTileEntity.this.burnTime;
 			case 1:
-				return ExampleProcessorTileEntity.this.burnTimeTotal;
+				return ExampleDecomposerTileEntity.this.burnTimeTotal;
 			case 2:
-				return ExampleProcessorTileEntity.this.cookTime;
+				return ExampleDecomposerTileEntity.this.cookTime;
 			case 3:
-				return ExampleProcessorTileEntity.this.cookTimeTotal;
+				return ExampleDecomposerTileEntity.this.cookTimeTotal;
 			default:
 				return 0;
 			}
@@ -72,16 +74,16 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		public void set(int index, int value) {
 			switch(index) {
 			case 0:
-				ExampleProcessorTileEntity.this.burnTime = value;
+				ExampleDecomposerTileEntity.this.burnTime = value;
 				break;
 			case 1:
-				ExampleProcessorTileEntity.this.burnTimeTotal = value;
+				ExampleDecomposerTileEntity.this.burnTimeTotal = value;
 				break;
 			case 2:
-				ExampleProcessorTileEntity.this.cookTime = value;
+				ExampleDecomposerTileEntity.this.cookTime = value;
 				break;
 			case 3:
-				ExampleProcessorTileEntity.this.cookTimeTotal = value;
+				ExampleDecomposerTileEntity.this.cookTimeTotal = value;
 			}
 		}
 
@@ -93,10 +95,13 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 
 	public static Map<Item, Integer> getBurnTimes(){
 		Map<Item, Integer> map = Maps.newLinkedHashMap();
-		addItemTagBurnTime(map, ItemTags.SAPLINGS, 800);
-		addItemTagBurnTime(map, ItemTags.LEAVES, 200);
-		addItemBurnTime(map, RegistryEvents.EXAMPLE_ITEM, 400);
-		addItemBurnTime(map, RegistryEvents.EXAMPLE_BLOCK, 4000);
+//		Map<Item, Integer> map = AbstractFurnaceTileEntity.getBurnTimes();
+		addItemBurnTime(map, Items.REDSTONE, 100);
+		addItemBurnTime(map, Blocks.REDSTONE_BLOCK, 1000);
+//		addItemTagBurnTime(map, ItemTags.SAPLINGS, 800);
+//		addItemTagBurnTime(map, ItemTags.LEAVES, 200);
+//		addItemBurnTime(map, RegistryEvents.EXAMPLE_ITEM, 400);
+//		addItemBurnTime(map, RegistryEvents.EXAMPLE_BLOCK, 4000);
 		return map;
 	}
 
@@ -110,9 +115,8 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		map.put(item.asItem(), time);
 	}
 
-	// Initialization
-	public ExampleProcessorTileEntity() {
-		super(RegistryEvents.EXAMPLE_PROCESSOR_TILEENTITY);
+	public ExampleDecomposerTileEntity() {
+		super(RegistryEvents.EXAMPLE_DECOMPOSER_TILEENTITY);
 	}
 
 	@Override
@@ -160,8 +164,9 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		}
 	}
 
+	//[Need Adjusted]
 	private int initCookTimeTotal() {
-		return this.world.getRecipeManager().getRecipe(RegistryEvents.EXAMPLE_PROCESSOR_RECIPE_TYPE, this, this.world).map(ExampleProcessorRecipe::getCookTime).orElse(200);
+		return this.world.getRecipeManager().getRecipe(RegistryEvents.EXAMPLE_DECOMPOSER_RECIPE_TYPE, this, this.world).map(ExampleDecomposerRecipe::getCookTime).orElse(200);
 	}
 
 	@Override
@@ -181,14 +186,15 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 
 	@Override
 	public Container createMenu(int id, PlayerInventory inventory, PlayerEntity player) {
-		return new ExampleProcessorContainer(id, inventory, this, this.furnaceData);
+		return new ExampleDecomposerContainer(id, inventory, this, this.furnaceData);
 	}
 
 	@Override
 	public ITextComponent getDisplayName() {
-		return new TranslationTextComponent("container.example_block_processor");
+		return new TranslationTextComponent("container.example_block_decomposer");
 	}
 
+	//[Need Adjusted]
 	@Override
 	public void tick() {
 		boolean flag = this.isBurning();
@@ -199,9 +205,10 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		if(!this.world.isRemote) {
 			ItemStack stack = this.items.get(1);
 			if(this.isBurning() || !stack.isEmpty() && !this.items.get(0).isEmpty()) {
-				IRecipe<?> recipe = this.world.getRecipeManager().getRecipe(RegistryEvents.EXAMPLE_PROCESSOR_RECIPE_TYPE, this, this.world).orElse(null);
+				IRecipe<?> recipe = this.world.getRecipeManager().getRecipe(RegistryEvents.EXAMPLE_DECOMPOSER_RECIPE_TYPE, this, this.world).orElse(null);
 				if(!this.isBurning() && this.canSmelt(recipe)) {
 					this.burnTime = this.initBurnTime(stack);
+					this.burnTimeTotal = this.burnTime;
 					if(this.isBurning()) {
 						update = true;
 						if(stack.hasContainerItem()) {
@@ -251,23 +258,33 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 
 	private boolean canSmelt(@Nullable IRecipe<?> recipe) {
 		if(!this.items.get(0).isEmpty() && recipe != null) {
-			ItemStack result = recipe.getRecipeOutput();
-			if(result.isEmpty()) {
+			ItemStack resultMain = recipe.getRecipeOutput();
+			ItemStack resultSub = ((ExampleDecomposerRecipe)recipe).getRecipeByproduct();
+			if(resultMain.isEmpty()) {
 				return false;
 			}
 			else {
-				ItemStack stack = this.items.get(2);
-				if(stack.isEmpty()) {
+				ItemStack stackMain = this.items.get(2);
+				ItemStack stackSub = this.items.get(3);
+				//主スロットが空or副産物があり、副スロットが空
+				if(stackMain.isEmpty() || (!resultSub.isEmpty() && stackSub.isEmpty())) {
 					return true;
 				}
-				else if(!stack.isItemEqual(result)) {
+				//↓[主スロットにアイテムがあるor両スロットにアイテムがある]
+				//どちらかのスロットアイテムと結果アイテムが違う
+				else if(!stackMain.isItemEqual(resultMain) || (!resultSub.isEmpty() && !stackSub.isItemEqual(resultSub))) {
 					return false;
 				}
-				else if(stack.getCount() + result.getCount() <= this.getInventoryStackLimit() && stack.getCount() + result.getCount() <= stack.getMaxStackSize()) {
-					return true;
-				}
+				//↓[両スロットアイテムが同種]
+				//両スロットアイテムとも総数が上限以下
+//				else if((stackMain.getCount() + resultMain.getCount() <= this.getInventoryStackLimit() && stackMain.getCount() + resultMain.getCount() <= stackMain.getMaxStackSize())
+//						&& (stackSub.getCount() + resultSub.getCount() <= this.getInventoryStackLimit() && stackSub.getCount() + resultSub.getCount() <= stackSub.getMaxStackSize())) {
+//					return true;
+//				}
 				else {
-					return stack.getCount() + result.getCount() <= stack.getMaxStackSize();
+					return (stackMain.getCount() + resultMain.getCount() <= this.getInventoryStackLimit() && stackMain.getCount() + resultMain.getCount() <= stackMain.getMaxStackSize())
+							&& (stackSub.getCount() + resultSub.getCount() <= this.getInventoryStackLimit() && stackSub.getCount() + resultSub.getCount() <= stackSub.getMaxStackSize());
+//					return (stackMain.getCount() + resultMain.getCount() <= stackMain.getMaxStackSize()) && (stackSub.getCount() + resultSub.getCount() <= stackSub.getMaxStackSize());
 				}
 			}
 		}
@@ -286,17 +303,30 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		}
 	}
 
+	// ↓11/25
 	private void smelt(IRecipe<?> recipe) {
 		if(recipe != null && this.canSmelt(recipe)) {
 			ItemStack ingredient = this.items.get(0);
-			ItemStack result = recipe.getRecipeOutput();
-			ItemStack stack = this.items.get(2);
-			if(stack.isEmpty()) {
-				this.items.set(2, result.copy());
+			ItemStack resultMain = recipe.getRecipeOutput();
+			ItemStack resultSub = ((ExampleDecomposerRecipe)recipe).getRecipeByproduct();
+			ItemStack stackMain = this.items.get(2);
+			ItemStack stackSub = this.items.get(3);
+			if(stackMain.isEmpty()) {
+				this.items.set(2, resultMain.copy());
 			}
 			else {
-				if(stack.isItemEqual(result)) {
-					stack.grow(result.getCount());
+				if(stackMain.isItemEqual(resultMain)) {
+					stackMain.grow(resultMain.getCount());
+				}
+			}
+			if(!resultSub.isEmpty()) {
+				if(stackSub.isEmpty()) {
+					this.items.set(3, resultSub.copy());
+				}
+				else {
+					if(stackSub.isItemEqual(resultSub)) {
+						stackSub.grow(resultSub.getCount());
+					}
 				}
 			}
 			if(!this.world.isRemote) {
@@ -339,7 +369,7 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		if(index == 2) {
+		if(index == 2 || index == 3) {
 			return false;
 		}
 		else if(index != 1) {
@@ -392,31 +422,31 @@ public class ExampleProcessorTileEntity extends TileEntity implements ISidedInve
 		//give experience
 		for(Entry<ResourceLocation, Integer> entry : this.recipeUsed.entrySet()) {
 			player.world.getRecipeManager().getRecipe(entry.getKey()).ifPresent((recipe) -> {
-				this.giveExperience(player, ((ExampleProcessorRecipe)recipe).getExperience(), entry.getValue());
+				this.giveExperience(player, ((ExampleDecomposerRecipe)recipe).getExperience(), entry.getValue());
 			});
 		}
 		this.recipeUsed.clear();
 	}
 
 	//各レシピについてやるから、出現するオーブが増えそう
-	private void giveExperience(PlayerEntity player, float base, int amount) {
-		int total = amount;
-		if(base == 0.0F) {
-			total = 0;
-		}
-		else {
-			if(base < 1.0F) {
-				int i = MathHelper.floor((float)amount * base);
-				if(i < MathHelper.ceil((float)amount + base) && Math.random() < (double)((float)amount * base - (float)i)) {
-					i++;
+		private void giveExperience(PlayerEntity player, float base, int amount) {
+			int total = amount;
+			if(base == 0.0F) {
+				total = 0;
+			}
+			else {
+				if(base < 1.0F) {
+					int i = MathHelper.floor((float)amount * base);
+					if(i < MathHelper.ceil((float)amount + base) && Math.random() < (double)((float)amount * base - (float)i)) {
+						i++;
+					}
+					total = i;
 				}
-				total = i;
+			}
+			while(total > 0) {
+				int split = ExperienceOrbEntity.getXPSplit(total);
+				total -= split;
+				player.world.addEntity(new ExperienceOrbEntity(player.world, player.posX, player.posY + 0.5D, player.posZ + 0.5D, split));
 			}
 		}
-		while(total > 0) {
-			int split = ExperienceOrbEntity.getXPSplit(total);
-			total -= split;
-			player.world.addEntity(new ExperienceOrbEntity(player.world, player.posX, player.posY + 0.5D, player.posZ + 0.5D, split));
-		}
-	}
 }

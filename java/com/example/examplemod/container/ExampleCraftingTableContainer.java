@@ -71,7 +71,6 @@ public class ExampleCraftingTableContainer extends Container {
 			ItemStack stack = ItemStack.EMPTY;
 			Optional<ExampleShapedRecipe> optional = world.getServer().getRecipeManager().getRecipe(RegistryEvents.EXAMPLE_CRAFTING_SHAPED_RECIPE_TYPE, matrix, world);
 //			Optional<ICraftingRecipe> optional = world.getServer().getRecipeManager().getRecipe(IRecipeType.CRAFTING, matrix, world);
-			System.out.println("Check: " + optional.toString());
 			/**
 			 * e.g. Optional[net.minecraft.item.crafting.ShapelessRecipe@65b97c]
 			 */
